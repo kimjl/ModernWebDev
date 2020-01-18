@@ -1,6 +1,7 @@
 const fs = require('fs');
 const util = require('util');
 const chalk = require('chalk');
+const path = require('path');
 
 //METHOD 1 - WRAP LSTAT IN PROMISE
 // const lstat = (filename) => {
@@ -28,7 +29,8 @@ fs.readdir(targetDir, async (err, filenames) => {
 
 	//PROMISE BASED SOLUTION ALL AT SAME TIME
 	const statPromises = filenames.map((filename) => {
-		return lstat(filename);
+		// return lstat(filename);
+		return lstat(path.join(targetDir, filename));
 	});
 
 	const allStats = await Promise.all(statPromises);

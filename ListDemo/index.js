@@ -1,5 +1,6 @@
 const fs = require('fs');
 const util = require('util');
+const chalk = require('chalk');
 
 //METHOD 1 - WRAP LSTAT IN PROMISE
 // const lstat = (filename) => {
@@ -18,8 +19,9 @@ const util = require('util');
 
 //METHOD 3 - RETURNS PROMISE INSTEAD OF CALLBACK
 const { lstat } = fs.promises;
+const targetDir = process.argv[2] || process.cwd();
 
-fs.readdir(process.cwd(), async (err, filenames) => {
+fs.readdir(targetDir, async (err, filenames) => {
 	if (err) {
 		console.log(err);
 	}
@@ -33,7 +35,12 @@ fs.readdir(process.cwd(), async (err, filenames) => {
 
 	for (let stats of allStats) {
 		const index = allStats.indexOf(stats);
-		console.log(filenames[index], stats.isFile());
+
+		if (stats.isFile()) {
+			console.log(filenames[index]);
+		} else {
+			console.log(chalk.bold(filenames[index]));
+		}
 	}
 
 	//PROMISE BASED SOLUTION ONE AT A TIME
